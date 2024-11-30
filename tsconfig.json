@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "strictBindCallApply": true,
+        "noUnusedLocals": true,
+        "moduleResolution" : "node16",
+        "outDir": "./build",
+        "module": "Node16",
+        "target": "ES6",
+        "alwaysStrict": true,
+        "allowSyntheticDefaultImports": true, // able to do import { default as varname } from 'module'
+        "declaration": true,
+        "isolatedDeclarations": true,
+        "noImplicitReturns": true,
+        "preserveSymlinks": true,
+        "removeComments": true,
+        "baseUrl": ".",
+        "rootDir": ".",
+        "paths": {
+            "/assets/ts/*": ["./assets/ts/*"],
+            "/assets/client-js/*": ["./system/*"],
+            "structured-fw/*": [
+                "./node_modules/structured/build/*",
+                "./*"
+            ]
+        }
+    },
+    "include": ["structured.tailwind.ts", "types.d.ts"]
+}
