@@ -1,0 +1,20 @@
+{
+  "type": "module",
+  "name": "structured-plugin-tailwind",
+  "version": "0.1.0",
+  "main": "build/structured.tailwind.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["structured", "structured-fw", "plugin"],
+  "author": "Julijan Andjelic",
+  "files": ["build/*"],
+  "license": "MIT",
+  "description": "Structured framework plugin that generates CSS for all components using TailwindCSS",
+  "dependencies": {
+    "@types/node": "^22.10.1",
+    "postcss": "^8.4.49",
+    "structured-fw": "^0.8.5",
+    "tailwindcss": "^3.4.15"
+  }
+}
