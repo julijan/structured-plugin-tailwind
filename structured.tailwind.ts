@@ -3,10 +3,10 @@ import postcss from 'postcss';
 import tailwindcss from 'tailwindcss';
 import { tailwindConfig } from './tailwind.config.js';
 
-export function structuredTailwind(app: Application): void {
+export async function structuredTailwind(app: Application): Promise<void> {
 
     // generate Tailwind base CSS (included to all documents)
-    const baseCSS = generateBaseCSS();
+    const baseCSS = await generateBaseCSS();
 
     // ComponentName -> CSS
     const css: Record<string, string | undefined> = {}
