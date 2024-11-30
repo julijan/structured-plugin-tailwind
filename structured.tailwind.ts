@@ -3,10 +3,13 @@ import postcss from 'postcss';
 import tailwindcss from 'tailwindcss';
 import { tailwindConfig } from './tailwind.config.js';
 
-export function plugin(app: Application): void {
+export function structuredTailwind(app: Application): void {
+
+    // generate Tailwind base CSS (included to all documents)
+    const baseCSS = generateBaseCSS();
 
     // ComponentName -> CSS
-    const css: Record<string, string> = {}
+    const css: Record<string, string | undefined> = {}
 
     // after components are loaded, generate their css using postcss/tailwind
     app.on('afterComponentsLoaded', async (components) => {
@@ -21,9 +24,16 @@ export function plugin(app: Application): void {
 
     // add component css to document head for each loaded component
     app.on('documentCreated', (document) => {
+
+        // add Tailwind base CSS
+        document.head.add(`<style type="text/css">${baseCSS}</style>`);
+
+        // on each component create, add it's generated CSS
         const componentsIncluded: Array<string> = [];
         document.on('componentCreated', (component) => {
-            if (! componentsIncluded.includes(component.name)) {
+            const componentCSS = css[component.name];
+            const hasCSS = typeof componentCSS === 'string' && componentCSS.length > 0;
+            if (hasCSS && ! componentsIncluded.includes(component.name)) {
                 document.head.add(`
                 <style type="text/css">
                     ${css[component.name]}
@@ -36,10 +46,19 @@ export function plugin(app: Application): void {
 }
 
 async function generateComponentCSS(html: string): Promise<string> {
-    const sourceCSS = '@tailwind base; @tailwind components; @tailwind utilities;';
+    const sourceCSS = '@tailwind components; @tailwind utilities;';
     const config = {
         presets: [tailwindConfig],
         content: [{ raw: html }]
+    };
+    return (await postcss([tailwindcss(config)]).process(sourceCSS)).css;
+}
+
+async function generateBaseCSS(): Promise<string> {
+    const sourceCSS = '@tailwind base;';
+    const config = {
+        presets: [tailwindConfig],
+        content: [{ raw: '' }]
     };
     return (await postcss([tailwindcss(config)]).process(sourceCSS)).css;
 }
